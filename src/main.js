@@ -27,8 +27,6 @@ export async function run() {
     })
     core.info(`Production hosts: ${productionHostsInput}!`)
 
-    // Get the current time and set as an output
-
     const targetHosts = productionHostsInput
       .split(',')
       .map((host) => host.trim())
@@ -43,7 +41,7 @@ export async function run() {
       }))
 
     core.info(`matrix: ${matrix}!`)
-    core.setOutput('matrix', matrix)
+    core.setOutput('matrix', ['Prod1', 'Prod2'])
 
     // Output the payload for debugging
     core.info(
