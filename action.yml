@@ -11,7 +11,7 @@ inputs:
     description: Target hosts
     required: true
 outputs:
-  time:
+  matrix:
     description: The time we greeted you
 
 runs:
