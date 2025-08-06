@@ -31234,13 +31234,17 @@ async function run() {
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
 
-    const hosts = coreExports.getInput('hosts', { required: true });
-    coreExports.info(`Hosts file: ${hosts}!`);
+    const hostsInput = coreExports.getInput('hosts', { required: true });
+    coreExports.info(`Hosts file: ${hostsInput}!`);
 
-    const targetHosts = coreExports.getInput('target-hosts', { required: true });
-    coreExports.info(`Target hosts: ${targetHosts}!`);
+    const targetHostsInput = coreExports.getInput('target-hosts', { required: true });
+    coreExports.info(`Target hosts: ${targetHostsInput}!`);
 
     // Get the current time and set as an output
+
+    const targetHosts = targetHostsInput.split(',').map((host) => host.trim());
+    const hosts = JSON.parse(hostsInput);
+
     const matrix = hosts.find((h) => targetHosts.includes(h.hostName));
 
     coreExports.info(`matrix: ${matrix}!`);

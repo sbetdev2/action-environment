@@ -19,13 +19,17 @@ export async function run() {
     const gitRef = github.context.ref
     core.info(`GitHub Ref: ${gitRef}`)
 
-    const hosts = core.getInput('hosts', { required: true })
-    core.info(`Hosts file: ${hosts}!`)
+    const hostsInput = core.getInput('hosts', { required: true })
+    core.info(`Hosts file: ${hostsInput}!`)
 
-    const targetHosts = core.getInput('target-hosts', { required: true })
-    core.info(`Target hosts: ${targetHosts}!`)
+    const targetHostsInput = core.getInput('target-hosts', { required: true })
+    core.info(`Target hosts: ${targetHostsInput}!`)
 
     // Get the current time and set as an output
+
+    const targetHosts = targetHostsInput.split(',').map((host) => host.trim())
+    const hosts = JSON.parse(hostsInput)
+
     const matrix = hosts.find((h) => targetHosts.includes(h.hostName))
 
     core.info(`matrix: ${matrix}!`)
