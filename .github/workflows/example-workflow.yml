@@ -24,6 +24,6 @@ jobs:
       # actions/action-environment@v1.2.3
       - name: Print to Log
         id: print-to-log
-        uses: actions/action-environment@master
+        uses: sbetdev2/action-environment@master
         with:
           who-to-greet: ${{ inputs.who-to-greet }}
