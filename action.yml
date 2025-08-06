@@ -4,12 +4,12 @@ author: GitHub Actions
 
 # Define your inputs here.
 inputs:
-  who-to-greet:
-    description: Who to greet
+  hosts:
+    description: All hosts
     required: true
-    default: World
-
-# Define your outputs here.
+  target-hosts: 
+    description: Target hosts
+    required: true
 outputs:
   time:
     description: The time we greeted you
