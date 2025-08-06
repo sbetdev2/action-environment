@@ -13,8 +13,8 @@ const isProductionHostName = (hostName) => {
 export async function run() {
   try {
     // Access secrets from environment variables
-    const mySecret = process.env.MY_SECRET
-    const anotherSecret = process.env.ANOTHER_SECRET
+    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
+    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
 
     const gitRef = github.context.ref
     core.info(`GitHub Ref: ${gitRef}`)
@@ -22,15 +22,25 @@ export async function run() {
     const hostsInput = core.getInput('hosts', { required: true })
     core.info(`Hosts file: ${hostsInput}!`)
 
-    const targetHostsInput = core.getInput('target-hosts', { required: true })
-    core.info(`Target hosts: ${targetHostsInput}!`)
+    const productionHostsInput = core.getInput('production-hosts', {
+      required: true
+    })
+    core.info(`Production hosts: ${productionHostsInput}!`)
 
     // Get the current time and set as an output
 
-    const targetHosts = targetHostsInput.split(',').map((host) => host.trim())
+    const targetHosts = productionHostsInput
+      .split(',')
+      .map((host) => host.trim())
     const hosts = JSON.parse(hostsInput)
 
-    const matrix = hosts.find((h) => targetHosts.includes(h.hostName))
+    const matrix = hosts
+      .filter((h) => targetHosts.includes(h.hostName))
+      .map((o) => ({
+        ...o,
+        privateKey: sshPk,
+        passphrase: sshPkPass
+      }))
 
     core.info(`matrix: ${matrix}!`)
     core.setOutput('matrix', matrix)

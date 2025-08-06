@@ -31228,8 +31228,8 @@ var githubExports = requireGithub();
 async function run() {
   try {
     // Access secrets from environment variables
-    const mySecret = process.env.MY_SECRET;
-    const anotherSecret = process.env.ANOTHER_SECRET;
+    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION;
+    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION;
 
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
@@ -31237,15 +31237,25 @@ async function run() {
     const hostsInput = coreExports.getInput('hosts', { required: true });
     coreExports.info(`Hosts file: ${hostsInput}!`);
 
-    const targetHostsInput = coreExports.getInput('target-hosts', { required: true });
-    coreExports.info(`Target hosts: ${targetHostsInput}!`);
+    const productionHostsInput = coreExports.getInput('production-hosts', {
+      required: true
+    });
+    coreExports.info(`Production hosts: ${productionHostsInput}!`);
 
     // Get the current time and set as an output
 
-    const targetHosts = targetHostsInput.split(',').map((host) => host.trim());
+    const targetHosts = productionHostsInput
+      .split(',')
+      .map((host) => host.trim());
     const hosts = JSON.parse(hostsInput);
 
-    const matrix = hosts.find((h) => targetHosts.includes(h.hostName));
+    const matrix = hosts
+      .filter((h) => targetHosts.includes(h.hostName))
+      .map((o) => ({
+        ...o,
+        privateKey: sshPk,
+        passphrase: sshPkPass
+      }));
 
     coreExports.info(`matrix: ${matrix}!`);
     coreExports.setOutput('matrix', matrix);
