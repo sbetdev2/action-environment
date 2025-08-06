@@ -31250,7 +31250,7 @@ async function run() {
     const hosts = JSON.parse(hostsInput);
 
     const matrix = hosts
-      .filter((h) => targetHosts.includes(h.hostName))
+      .filter((h) => targetHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
         privateKey: sshPk,
