@@ -41,7 +41,7 @@ export async function run() {
       }))
 
     core.info(`matrix: ${matrix}!`)
-    core.setOutput('matrix', ['Prod1', 'Prod2'])
+    core.setOutput('matrix', matrix)
 
     // Output the payload for debugging
     core.info(
