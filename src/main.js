@@ -36,12 +36,11 @@ export async function run() {
 
     const matrix = hosts
       .filter((h) => targetHosts.includes(h.hostname))
-      // .map((o) => ({
-      //   ...o,
-      //   privateKey: sshPk,
-      //   passphrase: sshPkPass
-      // }))
-      .map((o) => o.hostname)
+      .map((o) => ({
+        ...o,
+        privateKey: sshPk,
+        passphrase: sshPkPass
+      }))
 
     core.info(`matrix: ${matrix}!`)
     core.setOutput('matrix', matrix)
