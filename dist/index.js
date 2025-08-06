@@ -31224,15 +31224,27 @@ var githubExports = requireGithub();
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
+
 async function run() {
   try {
-    // The `who-to-greet` input is defined in action metadata file
-    const whoToGreet = coreExports.getInput('who-to-greet', { required: true });
-    coreExports.info(`Hello, ${whoToGreet}!`);
+    // Access secrets from environment variables
+    const mySecret = process.env.MY_SECRET;
+    const anotherSecret = process.env.ANOTHER_SECRET;
+
+    const gitRef = githubExports.context.ref;
+    coreExports.info(`GitHub Ref: ${gitRef}`);
+
+    const hosts = coreExports.getInput('hosts', { required: true });
+    coreExports.info(`Hosts file: ${hosts}!`);
+
+    const targetHosts = coreExports.getInput('target-hosts', { required: true });
+    coreExports.info(`Target hosts: ${targetHosts}!`);
 
     // Get the current time and set as an output
-    const time = new Date().toTimeString();
-    coreExports.setOutput('time', time);
+    const matrix = hosts.find((h) => targetHosts.includes(h.hostName));
+
+    coreExports.info(`matrix: ${matrix}!`);
+    coreExports.setOutput('matrix', matrix);
 
     // Output the payload for debugging
     coreExports.info(

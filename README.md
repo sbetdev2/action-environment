@@ -57,8 +57,7 @@ jobs:
 ```
 
 For example workflow runs, check out the
-[Actions tab](https://github.com/actions/action-environment/actions)!
-🚀
+[Actions tab](https://github.com/actions/action-environment/actions)! 🚀
 
 ## Inputs
 

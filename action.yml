@@ -7,7 +7,7 @@ inputs:
   hosts:
     description: All hosts
     required: true
-  target-hosts: 
+  target-hosts:
     description: Target hosts
     required: true
 outputs:

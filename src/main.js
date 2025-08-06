@@ -2,14 +2,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 const isProductionHostName = (hostName) => {
-  [
-    "Prod1",
-    "Prod2",
-    "Prod3",
-    "Prod4",
-    "Broker1",
-    "Broker2"
-  ].includes(hostName);
+  ;['Prod1', 'Prod2', 'Prod3', 'Prod4', 'Broker1', 'Broker2'].includes(hostName)
 }
 
 /**
@@ -24,18 +17,16 @@ export async function run() {
     const anotherSecret = process.env.ANOTHER_SECRET
 
     const gitRef = github.context.ref
-    core.info(`GitHub Ref: ${gitRef}`);
+    core.info(`GitHub Ref: ${gitRef}`)
 
     const hosts = core.getInput('hosts', { required: true })
-    core.info(`Hosts file: ${hosts}!`);
-
+    core.info(`Hosts file: ${hosts}!`)
 
     const targetHosts = core.getInput('target-hosts', { required: true })
     core.info(`Target hosts: ${targetHosts}!`)
 
-
     // Get the current time and set as an output
-    const matrix = hosts.find(h=> targetHosts.includes(h.hostName));
+    const matrix = hosts.find((h) => targetHosts.includes(h.hostName))
 
     core.info(`matrix: ${matrix}!`)
     core.setOutput('matrix', matrix)
