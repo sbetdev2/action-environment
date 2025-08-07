@@ -22,7 +22,7 @@ const mergeHosts = (matrix, key, hostNames, hostYaml) => {
     }))
 
   core.info(`newHosts: ${JSON.stringify(newHosts)}`)
-  return matrix.concat(newHosts)
+  matrix = matrix.concat(newHosts)
 }
 
 export async function run() {
