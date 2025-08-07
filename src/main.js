@@ -13,36 +13,36 @@ const isProductionHostName = (hostName) => {
 export async function run() {
   try {
     // Access secrets from environment variables
-    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
-    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
+    // const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
+    // const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
 
-    const gitRef = github.context.ref
-    core.info(`GitHub Ref: ${gitRef}`)
+    // const gitRef = github.context.ref
+    // core.info(`GitHub Ref: ${gitRef}`)
 
-    const hostsInput = core.getInput('hosts', { required: true })
-    core.info(`Hosts file: ${hostsInput}!`)
+    // const hostsInput = core.getInput('hosts', { required: true })
+    // core.info(`Hosts file: ${hostsInput}!`)
 
-    const productionHostsInput = core.getInput('production-hosts', {
-      required: true
-    })
-    core.info(`Production hosts: ${productionHostsInput}!`)
+    // const productionHostsInput = core.getInput('production-hosts', {
+    //   required: true
+    // })
+    // core.info(`Production hosts: ${productionHostsInput}!`)
 
-    const targetHosts = productionHostsInput
-      .split(',')
-      .map((host) => host.trim())
-    const hosts = JSON.parse(hostsInput)
+    // const targetHosts = productionHostsInput
+    //   .split(',')
+    //   .map((host) => host.trim())
+    // const hosts = JSON.parse(hostsInput)
 
-    const matrix = hosts
-      .filter((h) => targetHosts.includes(h.hostname))
-      .map((o) => ({
-        ...o
-        // privateKey: sshPk,
-        // passphrase: sshPkPass
-      }))
+    // const matrix = hosts
+    //   .filter((h) => targetHosts.includes(h.hostname))
+    //   .map((o) => ({
+    //     ...o
+    //     // privateKey: sshPk,
+    //     // passphrase: sshPkPass
+    //   }))
 
-    const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2'])
-    core.info(`matrix`)
-    core.info(matrixSerializaed)
+    // const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2'])
+    // core.info(`matrix`)
+    // core.info(matrixSerializaed)
     core.setOutput('matrix', 'test')
 
     core.info(
