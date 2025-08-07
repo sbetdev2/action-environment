@@ -20,10 +20,14 @@ export async function run() {
     core.info(`GitHub Ref: ${gitRef}`)
 
     const hostsInput = core.getInput('hosts', { required: true })
-    const hosts = yaml.load(hostsInput).hosts
-    core.info(`Hosts file: ${JSON.stringify(hosts)}`)
+    const hostYaml = yaml.load(hostsInput)
+    core.info(`Hosts file: ${JSON.stringify(hostYaml)}`)
 
     const productionHostsInput = core.getInput('production-hosts', {
+      required: true
+    })
+
+    const stagingHostsInput = core.getInput('staging-hosts', {
       required: true
     })
 
@@ -31,14 +35,14 @@ export async function run() {
       .split(',')
       .map((host) => host.trim())
 
-    core.info(`Production hosts: ${JSON.stringify(productionHosts)}`)
+    const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim())
 
-    const matrix = hosts
+    const matrix = hostYaml.hosts
       .filter((h) => productionHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
-        privateKey: sshPk,
-        passphrase: sshPkPass
+        privateKey: hostYaml.keys.production.privateKey,
+        passphrase: hostYaml.keys.production.passphrase
       }))
 
     const matrixSerializaed = JSON.stringify(matrix)
