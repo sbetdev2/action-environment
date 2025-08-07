@@ -35094,6 +35094,7 @@ async function run() {
       .map((host) => host.trim());
 
     coreExports.info(`Production hosts: ${JSON.stringify(productionHosts)}`);
+
     const matrix = hosts
       .filter((h) => productionHosts.includes(h.hostname))
       .map((o) => ({
@@ -35105,7 +35106,7 @@ async function run() {
     const matrixSerializaed = JSON.stringify(matrix);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
-    coreExports.setOutput('matrix', matrixSerializaed);
+    coreExports.setOutput('matrix', 'test');
 
     // core.info(
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
