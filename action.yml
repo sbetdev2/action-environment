@@ -18,6 +18,8 @@ outputs:
     description: Deployemnet matrix
   branch:
     description: Branch name
+  host:
+    description: Host to deploy to
 
 runs:
   using: node20

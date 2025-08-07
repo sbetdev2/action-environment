@@ -66,10 +66,18 @@ export async function run() {
         productionPk,
         true
       )
+    } else if (gitEventName === 'workflow_dispatch' && host !== 'production') {
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.staging,
+        stagingHosts,
+        staginPk
+      )
+      core.setOutput('host', host)
     } else if (
+      gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
-      host === 'production' &&
-      gitRef === 'refs/heads/master'
+      host === 'production'
     ) {
       matrix = mergeHosts(
         matrix,
@@ -78,15 +86,7 @@ export async function run() {
         productionPk,
         true
       )
-    } else {
-      matrix = mergeHosts(
-        matrix,
-        hostYaml.hosts.staging,
-        stagingHosts,
-        staginPk
-      )
     }
-
     const matrixSerializaed = JSON.stringify(matrix)
     core.info(`matrix`)
     core.info(matrixSerializaed)

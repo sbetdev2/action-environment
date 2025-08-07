@@ -35132,10 +35132,18 @@ async function run() {
         productionPk,
         true
       );
+    } else if (gitEventName === 'workflow_dispatch' && host !== 'production') {
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.staging,
+        stagingHosts,
+        staginPk
+      );
+      coreExports.setOutput('host', host);
     } else if (
+      gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
-      host === 'production' &&
-      gitRef === 'refs/heads/master'
+      host === 'production'
     ) {
       matrix = mergeHosts(
         matrix,
@@ -35144,15 +35152,7 @@ async function run() {
         productionPk,
         true
       );
-    } else {
-      matrix = mergeHosts(
-        matrix,
-        hostYaml.hosts.staging,
-        stagingHosts,
-        staginPk
-      );
     }
-
     const matrixSerializaed = JSON.stringify(matrix);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
