@@ -35075,9 +35075,6 @@ var jsYaml = {
 
 async function run() {
   try {
-    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION;
-    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION;
-
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
 
@@ -35097,6 +35094,7 @@ async function run() {
       .split(',')
       .map((host) => host.trim());
 
+    coreExports.info(`Production hosts: ${JSON.stringify(productionHosts)}`);
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
     const matrix = hostYaml.hosts.production

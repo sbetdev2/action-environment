@@ -13,9 +13,6 @@ const isProductionHostName = (hostName) => {
 
 export async function run() {
   try {
-    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
-    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
-
     const gitRef = github.context.ref
     core.info(`GitHub Ref: ${gitRef}`)
 
@@ -35,6 +32,7 @@ export async function run() {
       .split(',')
       .map((host) => host.trim())
 
+    core.info(`Production hosts: ${JSON.stringify(productionHosts)}`)
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim())
 
     const matrix = hostYaml.hosts.production
