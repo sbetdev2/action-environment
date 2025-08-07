@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-const yaml = require('js-yaml')
+import yaml from 'js-yaml'
 
 const isProductionHostName = (hostName) => {
   ;['Prod1', 'Prod2', 'Prod3', 'Prod4', 'Broker1', 'Broker2'].includes(hostName)
