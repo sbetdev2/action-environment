@@ -35073,13 +35073,14 @@ var jsYaml = {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (matrix, hosts, hostNames, privateKey) => {
+const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
       privateKey,
-      passphrase: 'betmeplease#@!'
+      passphrase: 'betmeplease#@!',
+      isProd
     }));
 
   coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
@@ -35127,7 +35128,8 @@ async function run() {
         matrix,
         hostYaml.hosts.production,
         productionHosts,
-        productionPk
+        productionPk,
+        true
       );
     } else if (
       gitEventName === 'workflow_dispatch' &&
@@ -35138,7 +35140,8 @@ async function run() {
         matrix,
         hostYaml.hosts.production,
         productionHosts,
-        productionPk
+        productionPk,
+        true
       );
     } else {
       matrix = mergeHosts(
