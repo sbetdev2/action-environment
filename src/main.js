@@ -22,7 +22,7 @@ const mergeHosts = (matrix, key, hostNames, hostYaml) => {
     }))
 
   core.info(`newHosts: ${JSON.stringify(newHosts)}`)
-  matrix = matrix.concat(newHosts)
+  return matrix.concat(newHosts)
 }
 
 export async function run() {
@@ -53,16 +53,16 @@ export async function run() {
     let host = core.getInput('host')
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
-      mergeHosts(matrix, 'staging', stagingHosts, hostYaml)
-      mergeHosts(matrix, 'production', productionHosts, hostYaml)
+      matrix = mergeHosts(matrix, 'staging', stagingHosts, hostYaml)
+      matrix = mergeHosts(matrix, 'production', productionHosts, hostYaml)
     } else if (
       gitEventName === 'workflow_dispatch' &&
       host === 'production' &&
       gitRef === 'refs/heads/master'
     ) {
-      mergeHosts(matrix, 'production', productionHosts, hostYaml)
+      matrix = mergeHosts(matrix, 'production', productionHosts, hostYaml)
     } else {
-      mergeHosts(matrix, 'staging', stagingHosts, hostYaml)
+      matrix = mergeHosts(matrix, 'staging', stagingHosts, hostYaml)
     }
 
     const matrixSerializaed = JSON.stringify(matrix)
