@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+const yaml = require('js-yaml')
 
 const isProductionHostName = (hostName) => {
   ;['Prod1', 'Prod2', 'Prod3', 'Prod4', 'Broker1', 'Broker2'].includes(hostName)
@@ -40,6 +41,7 @@ export async function run() {
     //     // passphrase: sshPkPass
     //   }))
 
+    // const data = yaml.load(fileContents);
     const matrixSerializaed = JSON.stringify(['Prod111111', 'Prod2222222222'])
     core.info(`matrix`)
     core.info(matrixSerializaed)

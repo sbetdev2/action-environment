@@ -31220,6 +31220,8 @@ function requireGithub () {
 
 var githubExports = requireGithub();
 
+require('js-yaml');
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -31255,6 +31257,7 @@ async function run() {
     //     // passphrase: sshPkPass
     //   }))
 
+    // const data = yaml.load(fileContents);
     const matrixSerializaed = JSON.stringify(['Prod111111', 'Prod2222222222']);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
