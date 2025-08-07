@@ -35083,7 +35083,7 @@ async function run() {
 
     const hostsInput = coreExports.getInput('hosts', { required: true });
     const hosts = jsYaml.load(hostsInput);
-    coreExports.info(`Hosts file: ${hosts}!`);
+    coreExports.info(`Hosts file: ${JSON.stringify(hosts)}`);
 
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true

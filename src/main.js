@@ -21,7 +21,7 @@ export async function run() {
 
     const hostsInput = core.getInput('hosts', { required: true })
     const hosts = yaml.load(hostsInput)
-    core.info(`Hosts file: ${hosts}!`)
+    core.info(`Hosts file: ${JSON.stringify(hosts)}`)
 
     const productionHostsInput = core.getInput('production-hosts', {
       required: true
