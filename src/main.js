@@ -8,10 +8,6 @@ import yaml from 'js-yaml'
  */
 
 const mergeHosts = (matrix, hosts, hostNames, privateKey) => {
-  core.info(`matrix: ${JSON.stringify(matrix)}`)
-  core.info(`hostNames: ${JSON.stringify(hostNames)}`)
-  core.info(`hostYaml: ${JSON.stringify(hostYaml)}`)
-
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
