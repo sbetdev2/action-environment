@@ -13,20 +13,20 @@ const isProductionHostName = (hostName) => {
 
 export async function run() {
   try {
-    // Access secrets from environment variables
-    // const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
-    // const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
+    const sshPk = process.env.SSH_PRIVATE_KEY_PRODUCTION
+    const sshPkPass = process.env.SSH_PRIVATE_KEY_PASSWORD_PRODUCTION
 
-    // const gitRef = github.context.ref
-    // core.info(`GitHub Ref: ${gitRef}`)
+    const gitRef = github.context.ref
+    core.info(`GitHub Ref: ${gitRef}`)
 
-    // const hostsInput = core.getInput('hosts', { required: true })
-    // core.info(`Hosts file: ${hostsInput}!`)
+    const hostsInput = core.getInput('hosts', { required: true })
+    const hosts = yaml.load(hostsInput)
+    core.info(`Hosts file: ${hosts}!`)
 
-    // const productionHostsInput = core.getInput('production-hosts', {
-    //   required: true
-    // })
-    // core.info(`Production hosts: ${productionHostsInput}!`)
+    const productionHostsInput = core.getInput('production-hosts', {
+      required: true
+    })
+    core.info(`Production hosts: ${productionHostsInput}!`)
 
     // const targetHosts = productionHostsInput
     //   .split(',')
