@@ -31255,10 +31255,10 @@ async function run() {
     //     // passphrase: sshPkPass
     //   }))
 
-    // const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2'])
-    // core.info(`matrix`)
-    // core.info(matrixSerializaed)
-    coreExports.setOutput('matrix', 'test');
+    const matrixSerializaed = JSON.stringify(['Prod111111', 'Prod2222222222']);
+    coreExports.info(`matrix`);
+    coreExports.info(matrixSerializaed);
+    coreExports.setOutput('matrix', matrixSerializaed);
 
     coreExports.info(
       `The event payload: ${JSON.stringify(githubExports.context.payload, null, 2)}`
