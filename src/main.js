@@ -40,10 +40,11 @@ export async function run() {
         // passphrase: sshPkPass
       }))
 
-    core.info(`matrix: ${matrix}!`)
-    core.setOutput('matrix', JSON.stringify(['Prod1', 'Prod2']))
+    const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2'])
+    core.info(`matrix`)
+    core.info(matrixSerializaed)
+    core.setOutput('matrix', JSON.stringify(matrixSerializaed))
 
-    // Output the payload for debugging
     core.info(
       `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     )

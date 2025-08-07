@@ -31255,8 +31255,10 @@ async function run() {
         // passphrase: sshPkPass
       }));
 
-    coreExports.info(`matrix: ${matrix}!`);
-    coreExports.setOutput('matrix', JSON.stringify(['Prod1', 'Prod2']));
+    const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2']);
+    coreExports.info(`matrix`);
+    coreExports.info(matrixSerializaed);
+    coreExports.setOutput('matrix', JSON.stringify(matrixSerializaed));
 
     // Output the payload for debugging
     coreExports.info(
