@@ -7,7 +7,7 @@ import yaml from 'js-yaml'
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd) => {
+const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd = false) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
