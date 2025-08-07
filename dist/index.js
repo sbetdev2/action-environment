@@ -35082,22 +35082,20 @@ async function run() {
     coreExports.info(`GitHub Ref: ${gitRef}`);
 
     const hostsInput = coreExports.getInput('hosts', { required: true });
-    const hosts = jsYaml.load(hostsInput);
+    const hosts = jsYaml.load(hostsInput).hosts;
     coreExports.info(`Hosts file: ${JSON.stringify(hosts)}`);
 
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
     });
-    coreExports.info(`Production hosts: ${productionHostsInput}!`);
 
     const productionHosts = productionHostsInput
       .split(',')
       .map((host) => host.trim());
 
-    const targetHosts = productionHosts.map((host) => host.trim());
-
-    const matrix = hosts.hosts
-      .filter((h) => targetHosts.includes(h.hostname))
+    coreExports.info(`Production hosts: ${JSON.stringify(productionHosts)}`);
+    const matrix = hosts
+      .filter((h) => productionHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
         privateKey: sshPk,

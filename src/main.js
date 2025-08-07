@@ -20,22 +20,21 @@ export async function run() {
     core.info(`GitHub Ref: ${gitRef}`)
 
     const hostsInput = core.getInput('hosts', { required: true })
-    const hosts = yaml.load(hostsInput)
+    const hosts = yaml.load(hostsInput).hosts
     core.info(`Hosts file: ${JSON.stringify(hosts)}`)
 
     const productionHostsInput = core.getInput('production-hosts', {
       required: true
     })
-    core.info(`Production hosts: ${productionHostsInput}!`)
 
     const productionHosts = productionHostsInput
       .split(',')
       .map((host) => host.trim())
 
-    const targetHosts = productionHosts.map((host) => host.trim())
+    core.info(`Production hosts: ${JSON.stringify(productionHosts)}`)
 
-    const matrix = hosts.hosts
-      .filter((h) => targetHosts.includes(h.hostname))
+    const matrix = hosts
+      .filter((h) => productionHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
         privateKey: sshPk,
