@@ -28,7 +28,10 @@ export async function run() {
     })
     core.info(`Production hosts: ${productionHostsInput}!`)
 
-    const productionHosts = JSON.parse(productionHostsInput)
+    const productionHosts = productionHostsInput
+      .split(',')
+      .map((host) => host.trim())
+
     const targetHosts = productionHosts.map((host) => host.trim())
 
     const matrix = hosts
