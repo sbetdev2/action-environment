@@ -17,7 +17,7 @@ const mergeHosts = (matrix, key, hostNames, hostYaml) => {
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      privateKey: hostYaml.keys[key].privateKey,
+      privateKey: `${hostYaml.keys[key].privateKey}\n`,
       passphrase: hostYaml.keys[key].passphrase
     }))
 
