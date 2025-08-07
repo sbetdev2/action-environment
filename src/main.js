@@ -26,7 +26,7 @@ export async function run() {
     const gitRef = github.context.ref
     core.info(`GitHub Ref: ${gitRef}`)
     const gitEventName = github.context.eventName
-    core.info(`GitHub event name: ${gitRef}`)
+    core.info(`GitHub event name: ${gitEventName}`)
 
     const hostYaml = yaml.load(process.env.HOSTS_YAML)
     core.info(`Hosts file: ${JSON.stringify(hostYaml)}`)
