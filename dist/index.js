@@ -31258,7 +31258,7 @@ async function run() {
     const matrixSerializaed = JSON.stringify(['Prod1', 'Prod2']);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
-    coreExports.setOutput('matrix', JSON.stringify(matrixSerializaed));
+    // core.setOutput('matrix', JSON.stringify(matrixSerializaed))
 
     coreExports.info(
       `The event payload: ${JSON.stringify(githubExports.context.payload, null, 2)}`
