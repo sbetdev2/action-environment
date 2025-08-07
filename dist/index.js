@@ -35113,7 +35113,7 @@ async function run() {
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       mergeHosts(matrix, 'staging', stagingHosts, hostYaml);
-      mergeHosts(matrix, 'production', productionHost, hostYaml);
+      mergeHosts(matrix, 'production', productionHosts, hostYaml);
     } else if (
       gitEventName === 'workflow_dispatch' &&
       host === 'production' &&
