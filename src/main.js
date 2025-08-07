@@ -14,7 +14,8 @@ const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd) => {
       ...h,
       privateKey,
       passphrase: 'betmeplease#@!',
-      isProd
+      isProd,
+      test: '123'
     }))
 
   core.info(`newHosts: ${JSON.stringify(newHosts)}`)

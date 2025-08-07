@@ -35080,7 +35080,8 @@ const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd) => {
       ...h,
       privateKey,
       passphrase: 'betmeplease#@!',
-      isProd
+      isProd,
+      test: '123'
     }));
 
   coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
