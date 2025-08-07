@@ -35088,7 +35088,7 @@ const mergeHosts = (matrix, key, hostNames, hostYaml) => {
     }));
 
   coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
-  return matrix.concat(newHosts)
+  matrix = matrix.concat(newHosts);
 };
 
 async function run() {
