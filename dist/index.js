@@ -35092,6 +35092,7 @@ async function run() {
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
     const gitEventName = githubExports.context.eventName;
+    coreExports.info(`GitHub event name: ${gitRef}`);
 
     const hostYaml = jsYaml.load(process.env.HOSTS_YAML);
     coreExports.info(`Hosts file: ${JSON.stringify(hostYaml)}`);
