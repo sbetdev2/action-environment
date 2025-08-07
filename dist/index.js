@@ -31250,9 +31250,9 @@ async function run() {
     const matrix = hosts
       .filter((h) => targetHosts.includes(h.hostname))
       .map((o) => ({
-        ...o,
-        privateKey: sshPk,
-        passphrase: sshPkPass
+        ...o
+        // privateKey: sshPk,
+        // passphrase: sshPkPass
       }));
 
     coreExports.info(`matrix: ${matrix}!`);
