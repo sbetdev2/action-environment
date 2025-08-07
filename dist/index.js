@@ -35093,9 +35093,10 @@ async function run() {
     const productionHosts = productionHostsInput
       .split(',')
       .map((host) => host.trim());
+
     const targetHosts = productionHosts.map((host) => host.trim());
 
-    const matrix = hosts
+    const matrix = hosts.hosts
       .filter((h) => targetHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
