@@ -35073,18 +35073,17 @@ var jsYaml = {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (matrix, key, hostNames, hostYaml) => {
+const mergeHosts = (matrix, hosts, hostNames, privateKey) => {
   coreExports.info(`matrix: ${JSON.stringify(matrix)}`);
-  coreExports.info(`key: ${key}`);
   coreExports.info(`hostNames: ${JSON.stringify(hostNames)}`);
   coreExports.info(`hostYaml: ${JSON.stringify(hostYaml)}`);
 
-  let newHosts = hostYaml.hosts[key]
+  let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      privateKey: hostYaml.keys[key].privateKey,
-      passphrase: hostYaml.keys[key].passphrase
+      privateKey,
+      passphrase: 'betmeplease#@!'
     }));
 
   coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
@@ -35099,6 +35098,9 @@ async function run() {
 
     const hostYaml = jsYaml.load(process.env.HOSTS_YAML);
     coreExports.info(`Hosts file: ${JSON.stringify(hostYaml)}`);
+
+    const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY;
+    const staginPk = process.env.SSH_STAGING_PRIVATE_KEY;
 
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
@@ -35119,16 +35121,36 @@ async function run() {
     let host = coreExports.getInput('host');
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
-      matrix = mergeHosts(matrix, 'staging', stagingHosts, hostYaml);
-      matrix = mergeHosts(matrix, 'production', productionHosts, hostYaml);
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.staging,
+        stagingHosts,
+        staginPk
+      );
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.production,
+        productionHosts,
+        productionPk
+      );
     } else if (
       gitEventName === 'workflow_dispatch' &&
       host === 'production' &&
       gitRef === 'refs/heads/master'
     ) {
-      matrix = mergeHosts(matrix, 'production', productionHosts, hostYaml);
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.production,
+        productionHosts,
+        productionPk
+      );
     } else {
-      matrix = mergeHosts(matrix, 'staging', stagingHosts, hostYaml);
+      matrix = mergeHosts(
+        matrix,
+        hostYaml.hosts.staging,
+        stagingHosts,
+        staginPk
+      );
     }
 
     const matrixSerializaed = JSON.stringify(matrix);
