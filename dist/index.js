@@ -35099,7 +35099,7 @@ async function run() {
 
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
-    const matrix = hostYaml.hosts
+    const matrix = hostYaml.hosts.production
       .filter((h) => productionHosts.includes(h.hostname))
       .map((o) => ({
         ...o,
