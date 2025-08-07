@@ -41,7 +41,7 @@ export async function run() {
       }))
 
     core.info(`matrix: ${matrix}!`)
-    core.setOutput('matrix', 'test')
+    core.setOutput('matrix', JSON.stringify({ id: 1, name: 'test' }))
 
     // Output the payload for debugging
     core.info(

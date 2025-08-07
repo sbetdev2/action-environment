@@ -31256,7 +31256,7 @@ async function run() {
       }));
 
     coreExports.info(`matrix: ${matrix}!`);
-    coreExports.setOutput('matrix', 'test');
+    coreExports.setOutput('matrix', JSON.stringify({ id: 1, name: 'test' }));
 
     // Output the payload for debugging
     coreExports.info(
