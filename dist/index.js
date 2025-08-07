@@ -35078,8 +35078,7 @@ async function run() {
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
 
-    const hostsInput = coreExports.getInput('hosts', { required: true });
-    const hostYaml = jsYaml.load(hostsInput);
+    const hostYaml = jsYaml.load(process.env.HOSTS_YAML);
     coreExports.info(`Hosts file: ${JSON.stringify(hostYaml)}`);
 
     const productionHostsInput = coreExports.getInput('production-hosts', {
