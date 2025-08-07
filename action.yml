@@ -10,9 +10,14 @@ inputs:
   staging-hosts:
     description: Staging hosts
     required: true
+  host:
+    description: Host to deploy to
+    required: true
 outputs:
   matrix:
-    description: The time we greeted you
+    description: Deployemnet matrix
+  branch:
+    description: Branch name
 
 runs:
   using: node20

@@ -35073,10 +35073,22 @@ var jsYaml = {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
+const mergeHosts = (matrix, key, hostNames, hostYaml) => {
+  let newHosts = hostYaml.hosts[key]
+    .filter((h) => hostNames.includes(h.hostname))
+    .map((h) => ({
+      ...h,
+      privateKey: hostYaml.keys[key].privateKey,
+      passphrase: hostYaml.keys[key].passphrase
+    }));
+  return matrix.concat(newHosts)
+};
+
 async function run() {
   try {
     const gitRef = githubExports.context.ref;
     coreExports.info(`GitHub Ref: ${gitRef}`);
+    const gitEventName = githubExports.context.eventName;
 
     const hostYaml = jsYaml.load(process.env.HOSTS_YAML);
     coreExports.info(`Hosts file: ${JSON.stringify(hostYaml)}`);
@@ -35096,19 +35108,27 @@ async function run() {
     coreExports.info(`Production hosts: ${JSON.stringify(productionHosts)}`);
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
-    const matrix = hostYaml.hosts.production
-      .filter((h) => productionHosts.includes(h.hostname))
-      .map((o) => ({
-        ...o,
-        privateKey: hostYaml.keys.production.privateKey,
-        passphrase: hostYaml.keys.production.passphrase
-      }));
+    let matrix = [];
+    let host = coreExports.getInput('host');
+
+    if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
+      mergeHosts(matrix, 'staging', stagingHosts, hostYaml);
+      mergeHosts(matrix, 'production', productionHost, hostYaml);
+    } else if (
+      gitEventName === 'workflow_dispatch' &&
+      host === 'production' &&
+      gitRef === 'refs/heads/master'
+    ) {
+      mergeHosts(matrix, 'production', productionHosts, hostYaml);
+    } else {
+      mergeHosts(matrix, 'staging', stagingHosts, hostYaml);
+    }
 
     const matrixSerializaed = JSON.stringify(matrix);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
     coreExports.setOutput('matrix', matrixSerializaed);
-
+    coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     // core.info(
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     // )
