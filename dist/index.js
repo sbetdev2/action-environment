@@ -31260,7 +31260,6 @@ async function run() {
     coreExports.info(matrixSerializaed);
     coreExports.setOutput('matrix', JSON.stringify(matrixSerializaed));
 
-    // Output the payload for debugging
     coreExports.info(
       `The event payload: ${JSON.stringify(githubExports.context.payload, null, 2)}`
     );
