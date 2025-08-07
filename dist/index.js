@@ -35073,15 +35073,14 @@ var jsYaml = {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd) => {
+const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd = false) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
       privateKey,
       passphrase: 'betmeplease#@!',
-      isProd,
-      test: '123'
+      isProd
     }));
 
   coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
