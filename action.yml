@@ -4,9 +4,6 @@ author: GitHub Actions
 
 # Define your inputs here.
 inputs:
-  hosts:
-    description: All hosts
-    required: true
   production-hosts:
     description: Target hosts
     required: true
