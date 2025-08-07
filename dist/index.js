@@ -35090,21 +35090,18 @@ async function run() {
     });
     coreExports.info(`Production hosts: ${productionHostsInput}!`);
 
-    // const targetHosts = productionHostsInput
-    //   .split(',')
-    //   .map((host) => host.trim())
-    // const hosts = JSON.parse(hostsInput)
+    const productionHosts = JSON.parse(productionHostsInput);
+    const targetHosts = productionHosts.map((host) => host.trim());
 
-    // const matrix = hosts
-    //   .filter((h) => targetHosts.includes(h.hostname))
-    //   .map((o) => ({
-    //     ...o
-    //     // privateKey: sshPk,
-    //     // passphrase: sshPkPass
-    //   }))
+    const matrix = hosts
+      .filter((h) => targetHosts.includes(h.hostname))
+      .map((o) => ({
+        ...o,
+        privateKey: sshPk,
+        passphrase: sshPkPass
+      }));
 
-    // const data = yaml.load(fileContents);
-    const matrixSerializaed = JSON.stringify(['Prod111111', 'Prod2222222222']);
+    const matrixSerializaed = JSON.stringify(matrix);
     coreExports.info(`matrix`);
     coreExports.info(matrixSerializaed);
     coreExports.setOutput('matrix', matrixSerializaed);
