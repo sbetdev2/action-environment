@@ -35074,6 +35074,11 @@ var jsYaml = {
  */
 
 const mergeHosts = (matrix, key, hostNames, hostYaml) => {
+  coreExports.info(`matrix: ${JSON.stringify(matrix)}`);
+  coreExports.info(`key: ${key}`);
+  coreExports.info(`hostNames: ${JSON.stringify(hostNames)}`);
+  coreExports.info(`hostYaml: ${JSON.stringify(hostYaml)}`);
+
   let newHosts = hostYaml.hosts[key]
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
@@ -35081,6 +35086,8 @@ const mergeHosts = (matrix, key, hostNames, hostYaml) => {
       privateKey: hostYaml.keys[key].privateKey,
       passphrase: hostYaml.keys[key].passphrase
     }));
+
+  coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
   return matrix.concat(newHosts)
 };
 
