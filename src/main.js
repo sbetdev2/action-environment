@@ -104,7 +104,7 @@ export async function run() {
     const matrixSerializaed = JSON.stringify(matrix)
     core.info(`matrix`)
     core.info(matrixSerializaed)
-    core.setOutput('matrix', matrixSerializaed)
+    core.setOutput('matrix', matrix)
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     // core.info(
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
