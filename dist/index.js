@@ -35085,8 +35085,8 @@ const mergeHosts = (
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      privateKey: JSON.parse(privateKey),
-      passphrase: JSON.parse(passphrase),
+      privateKey,
+      passphrase,
       isProd
     }));
 
