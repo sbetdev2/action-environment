@@ -71,7 +71,10 @@ export async function run() {
         sshPassphrase,
         true
       )
-    } else if (gitEventName === 'workflow_dispatch' && host !== 'production') {
+    } else if (
+      gitEventName === 'workflow_dispatch' &&
+      hostname !== 'production'
+    ) {
       matrix = mergeHosts(
         matrix,
         hostYaml.hosts.staging,
@@ -84,7 +87,7 @@ export async function run() {
     } else if (
       gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
-      host === 'production'
+      hostname === 'production'
     ) {
       matrix = mergeHosts(
         matrix,
@@ -96,7 +99,6 @@ export async function run() {
       )
     }
     const matrixSerializaed = JSON.stringify(matrix)
-    core.setOutput('host', host)
     core.setOutput('matrix', matrixSerializaed)
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     // core.info(

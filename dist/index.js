@@ -35137,7 +35137,10 @@ async function run() {
         sshPassphrase,
         true
       );
-    } else if (gitEventName === 'workflow_dispatch' && host !== 'production') {
+    } else if (
+      gitEventName === 'workflow_dispatch' &&
+      hostname !== 'production'
+    ) {
       matrix = mergeHosts(
         matrix,
         hostYaml.hosts.staging,
@@ -35150,7 +35153,7 @@ async function run() {
     } else if (
       gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
-      host === 'production'
+      hostname === 'production'
     ) {
       matrix = mergeHosts(
         matrix,
@@ -35162,7 +35165,6 @@ async function run() {
       );
     }
     const matrixSerializaed = JSON.stringify(matrix);
-    coreExports.setOutput('host', host);
     coreExports.setOutput('matrix', matrixSerializaed);
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     // core.info(
