@@ -19,8 +19,8 @@ const mergeHosts = (
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      privateKey,
-      passphrase: 'betwithme0909!', //: JSON.parse(passphrase),
+      // privateKey,
+      passphrase, //: 'betwithme0909!', //: JSON.parse(passphrase),
       isProd
     }))
 
