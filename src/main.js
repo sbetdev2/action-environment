@@ -36,7 +36,7 @@ export async function run() {
     const gitRef = github.context.ref
     const gitEventName = github.context.eventName
 
-    const hostYaml = yaml.load(process.env.HOSTS_YAML)
+    const hostYaml = yaml.load(process.env.ENVIRONMENTS_YAML)
     const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
     const sshPassphrase = process.env.SSH_PASSPHRASE
