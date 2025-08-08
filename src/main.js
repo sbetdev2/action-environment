@@ -24,7 +24,7 @@ const mergeHosts = (
         ...h,
         hostname: hostname || h.hostname,
         // passphrase,
-        environemt: environment,
+        environment: environment,
         isProd: environment === 'production'
       }))
 
