@@ -35079,14 +35079,15 @@ const mergeHosts = (
   hostNames,
   privateKey,
   passphrase,
-  isProd = false
+  isProd = false,
+  hostname
 ) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      // privateKey,
-      passphrase, //: 'betwithme0909!', //: JSON.parse(passphrase),
+      hostname: hostname || h.hostname,
+      passphrase,
       isProd
     }));
 
@@ -35118,7 +35119,7 @@ async function run() {
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
     let matrix = [];
-    let host = coreExports.getInput('host');
+    const hostname = coreExports.getInput('hostname');
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       matrix = mergeHosts(
@@ -35142,9 +35143,10 @@ async function run() {
         hostYaml.hosts.staging,
         stagingHosts,
         staginPk,
-        sshPassphrase
+        sshPassphrase,
+        false,
+        hostname
       );
-      coreExports.setOutput('host', host);
     } else if (
       gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
@@ -35160,6 +35162,7 @@ async function run() {
       );
     }
     const matrixSerializaed = JSON.stringify(matrix);
+    coreExports.setOutput('host', host);
     coreExports.setOutput('matrix', matrixSerializaed);
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     // core.info(

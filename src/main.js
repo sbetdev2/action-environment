@@ -13,14 +13,15 @@ const mergeHosts = (
   hostNames,
   privateKey,
   passphrase,
-  isProd = false
+  isProd = false,
+  hostname
 ) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
-      // privateKey,
-      passphrase, //: 'betwithme0909!', //: JSON.parse(passphrase),
+      hostname: hostname || h.hostname,
+      passphrase,
       isProd
     }))
 
@@ -52,7 +53,7 @@ export async function run() {
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim())
 
     let matrix = []
-    let host = core.getInput('host')
+    const hostname = core.getInput('hostname')
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       matrix = mergeHosts(
@@ -76,9 +77,10 @@ export async function run() {
         hostYaml.hosts.staging,
         stagingHosts,
         staginPk,
-        sshPassphrase
+        sshPassphrase,
+        false,
+        hostname
       )
-      core.setOutput('host', host)
     } else if (
       gitRef === 'refs/heads/master' &&
       gitEventName === 'workflow_dispatch' &&
@@ -94,6 +96,7 @@ export async function run() {
       )
     }
     const matrixSerializaed = JSON.stringify(matrix)
+    core.setOutput('host', host)
     core.setOutput('matrix', matrixSerializaed)
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     // core.info(
