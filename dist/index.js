@@ -35090,25 +35090,18 @@ const mergeHosts = (
       isProd
     }));
 
-  coreExports.info(`newHosts: ${JSON.stringify(newHosts)}`);
   return matrix.concat(newHosts)
 };
 
 async function run() {
   try {
     const gitRef = githubExports.context.ref;
-    coreExports.info(`GitHub Ref: ${gitRef}`);
     const gitEventName = githubExports.context.eventName;
-    coreExports.info(`GitHub event name: ${gitEventName}`);
 
     const hostYaml = jsYaml.load(process.env.HOSTS_YAML);
-    coreExports.info(`Hosts file: ${JSON.stringify(hostYaml)}`);
-
     const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY;
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY;
     const sshPassphrase = process.env.SSH_PASSPHRASE;
-
-    coreExports.info(`Production hosts:`, productionPk);
 
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
@@ -35122,7 +35115,6 @@ async function run() {
       .split(',')
       .map((host) => host.trim());
 
-    coreExports.info(`Production hosts: ${JSON.stringify(productionHosts)}`);
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
     let matrix = [];
