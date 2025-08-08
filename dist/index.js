@@ -35073,13 +35073,20 @@ var jsYaml = {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (matrix, hosts, hostNames, privateKey, isProd = false) => {
+const mergeHosts = (
+  matrix,
+  hosts,
+  hostNames,
+  privateKey,
+  passphrase,
+  isProd = false
+) => {
   let newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
       privateKey,
-      passphrase: 'betmeplease#@!',
+      passphrase,
       isProd
     }));
 
@@ -35099,6 +35106,7 @@ async function run() {
 
     const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY;
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY;
+    const sshPassphrase = process.env.SSH_PASSPHRASE;
 
     coreExports.info(`Production hosts:`, productionPk);
 
@@ -35125,13 +35133,15 @@ async function run() {
         matrix,
         hostYaml.hosts.staging,
         stagingHosts,
-        staginPk
+        staginPk,
+        sshPassphrase
       );
       matrix = mergeHosts(
         matrix,
         hostYaml.hosts.production,
         productionHosts,
         productionPk,
+        sshPassphrase,
         true
       );
     } else if (gitEventName === 'workflow_dispatch' && host !== 'production') {
@@ -35139,7 +35149,8 @@ async function run() {
         matrix,
         hostYaml.hosts.staging,
         stagingHosts,
-        staginPk
+        staginPk,
+        sshPassphrase
       );
       coreExports.setOutput('host', host);
     } else if (
@@ -35152,6 +35163,7 @@ async function run() {
         hostYaml.hosts.production,
         productionHosts,
         productionPk,
+        sshPassphrase,
         true
       );
     }
