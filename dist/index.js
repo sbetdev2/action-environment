@@ -35091,7 +35091,8 @@ const mergeHosts = (
         hostname: hostname || h.hostname,
         // passphrase,
         environment,
-        isProd: environment === 'production'
+        isProd: environment === 'production',
+        test: 1
       }));
 
   return matrix.concat(newHosts)
