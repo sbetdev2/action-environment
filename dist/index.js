@@ -35080,7 +35080,6 @@ const mergeHosts = (
   hostNames,
   privateKey,
   passphrase,
-  isProd = false,
   hostname
 ) => {
   let newHosts =
@@ -35089,10 +35088,10 @@ const mergeHosts = (
       .filter((h) => hostNames.includes(h.hostname))
       .map((h) => ({
         ...h,
-        hostname: h.hostname,
+        hostname: hostname || h.hostname,
         // passphrase,
         environemt: environment,
-        isProd
+        isProd: environment === 'production'
       }));
 
   return matrix.concat(newHosts)
@@ -35152,7 +35151,8 @@ async function run() {
         hostYaml,
         stagingHosts,
         staginPk,
-        sshPassphrase
+        sshPassphrase,
+        hostname
       );
     } else if (
       gitRef === 'refs/heads/master' &&

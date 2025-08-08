@@ -14,7 +14,6 @@ const mergeHosts = (
   hostNames,
   privateKey,
   passphrase,
-  isProd = false,
   hostname
 ) => {
   let newHosts =
@@ -26,7 +25,7 @@ const mergeHosts = (
         hostname: hostname || h.hostname,
         // passphrase,
         environemt: environment,
-        isProd
+        isProd: environment === 'production'
       }))
 
   return matrix.concat(newHosts)
@@ -86,7 +85,8 @@ export async function run() {
         hostYaml,
         stagingHosts,
         staginPk,
-        sshPassphrase
+        sshPassphrase,
+        hostname
       )
     } else if (
       gitRef === 'refs/heads/master' &&
