@@ -35076,24 +35076,23 @@ var jsYaml = {
 const mergeHosts = (
   matrix,
   environment,
-  hostYaml,
+  envYaml,
   hostNames,
   privateKey,
   passphrase,
   hostname
 ) => {
-  let newHosts =
-    hostYaml.environments[environment] ||
-    []
-      .filter((h) => hostNames.includes(h.hostname))
-      .map((h) => ({
-        ...h,
-        hostname: hostname || h.hostname,
-        // passphrase,
-        environment,
-        isProd: environment === 'production',
-        test: 1
-      }));
+  const hosts = envYaml.environments[environment] || [];
+  const newHosts = hosts
+    .filter((h) => hostNames.includes(h.hostname))
+    .map((h) => ({
+      ...h,
+      hostname: hostname || h.hostname,
+      // passphrase,
+      environment,
+      isProd: environment === 'production',
+      test: 1
+    }));
 
   return matrix.concat(newHosts)
 };
