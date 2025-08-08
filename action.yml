@@ -10,14 +10,13 @@ inputs:
   staging-hosts:
     description: Staging hosts
     required: true
+  hostname:
+    description: Host to deploy to
 outputs:
   matrix:
     description: Deployemnet matrix
   branch:
     description: Branch name
-  hostname:
-    description: Host to deploy to
-
 runs:
   using: node20
   main: dist/index.js
