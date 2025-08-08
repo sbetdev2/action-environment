@@ -35160,8 +35160,6 @@ async function run() {
       );
     }
     const matrixSerializaed = JSON.stringify(matrix);
-    coreExports.info(`matrix`);
-    coreExports.info(matrixSerializaed);
     coreExports.setOutput('matrix', matrixSerializaed);
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     // core.info(
