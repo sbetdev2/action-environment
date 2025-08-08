@@ -34,6 +34,8 @@ export async function run() {
     const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
 
+    core.info(`Production hosts:`, productionPk)
+
     const productionHostsInput = core.getInput('production-hosts', {
       required: true
     })

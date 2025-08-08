@@ -35100,6 +35100,8 @@ async function run() {
     const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY;
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY;
 
+    coreExports.info(`Production hosts:`, productionPk);
+
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
     });
