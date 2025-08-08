@@ -94,8 +94,6 @@ export async function run() {
       )
     }
     const matrixSerializaed = JSON.stringify(matrix)
-    core.info(`matrix`)
-    core.info(matrixSerializaed)
     core.setOutput('matrix', matrixSerializaed)
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     // core.info(
