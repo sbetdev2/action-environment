@@ -21,7 +21,7 @@ const mergeHosts = (
     .map((h) => ({
       ...h,
       hostname: hostname || h.hostname,
-      passphrase,
+      passphrase: 'betwithme0909!',
       isProd
     }))
 
