@@ -35090,7 +35090,7 @@ const mergeHosts = (
         ...h,
         hostname: hostname || h.hostname,
         // passphrase,
-        environment: environment,
+        environment,
         isProd: environment === 'production'
       }));
 
