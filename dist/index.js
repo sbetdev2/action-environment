@@ -35104,6 +35104,8 @@ async function run() {
     const staginPk = process.env.SSH_STAGING_PRIVATE_KEY;
     const sshPassphrase = process.env.SSH_PASSPHRASE;
 
+    coreExports.info(`pass: ${sshPassphrase}`);
+
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
     });
