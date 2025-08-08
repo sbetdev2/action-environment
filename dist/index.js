@@ -35086,7 +35086,7 @@ const mergeHosts = (
     .map((h) => ({
       ...h,
       privateKey,
-      passphrase: JSON.parse(passphrase),
+      passphrase, //: JSON.parse(passphrase),
       isProd
     }));
 
