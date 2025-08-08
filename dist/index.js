@@ -35087,7 +35087,7 @@ const mergeHosts = (
     .map((h) => ({
       ...h,
       hostname: hostname || h.hostname,
-      passphrase: '1',
+      passphrase,
       isProd
     }));
 
