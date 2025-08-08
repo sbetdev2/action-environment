@@ -18,7 +18,7 @@ const mergeHosts = (
   hostname
 ) => {
   let newHosts =
-    hostYaml.hosts[environment] ||
+    hostYaml.environments[environment] ||
     []
       .filter((h) => hostNames.includes(h.hostname))
       .map((h) => ({
