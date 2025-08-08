@@ -35075,21 +35075,25 @@ var jsYaml = {
 
 const mergeHosts = (
   matrix,
-  hosts,
+  environment,
+  hostYaml,
   hostNames,
   privateKey,
   passphrase,
   isProd = false,
   hostname
 ) => {
-  let newHosts = hosts
-    .filter((h) => hostNames.includes(h.hostname))
-    .map((h) => ({
-      ...h,
-      hostname: hostname || h.hostname,
-      // passphrase,
-      isProd
-    }));
+  let newHosts =
+    hostYaml.hosts[environment] ||
+    []
+      .filter((h) => hostNames.includes(h.hostname))
+      .map((h) => ({
+        ...h,
+        hostname: h.hostname,
+        // passphrase,
+        environemt: environment,
+        isProd
+      }));
 
   return matrix.concat(newHosts)
 };
@@ -35124,18 +35128,19 @@ async function run() {
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       matrix = mergeHosts(
         matrix,
-        hostYaml.hosts.staging,
+        'staging',
+        hostYaml,
         stagingHosts,
         staginPk,
         sshPassphrase
       );
       matrix = mergeHosts(
         matrix,
-        hostYaml.hosts.production,
+        'production',
+        hostYaml,
         productionHosts,
         productionPk,
-        sshPassphrase,
-        true
+        sshPassphrase
       );
     } else if (
       gitEventName === 'workflow_dispatch' &&
@@ -35143,12 +35148,11 @@ async function run() {
     ) {
       matrix = mergeHosts(
         matrix,
-        hostYaml.hosts.staging,
+        'staging',
+        hostYaml,
         stagingHosts,
         staginPk,
-        sshPassphrase,
-        false,
-        hostname
+        sshPassphrase
       );
     } else if (
       gitRef === 'refs/heads/master' &&
@@ -35157,14 +35161,13 @@ async function run() {
     ) {
       matrix = mergeHosts(
         matrix,
-        hostYaml.hosts.production,
+        'production',
+        hostYaml,
         productionHosts,
         productionPk,
-        sshPassphrase,
-        true
+        sshPassphrase
       );
     }
-    const matrixSerializaed = JSON.stringify(matrix);
     coreExports.setOutput('matrix', matrix);
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     // core.info(
