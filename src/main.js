@@ -7,22 +7,13 @@ import yaml from 'js-yaml'
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 
-const mergeHosts = (
-  matrix,
-  environment,
-  envYaml,
-  hostNames,
-  privateKey,
-  passphrase,
-  hostname
-) => {
+const mergeHosts = (matrix, environment, envYaml, hostNames, hostname) => {
   const hosts = envYaml.environments[environment] || []
   const newHosts = hosts
     .filter((h) => hostNames.includes(h.hostname))
     .map((h) => ({
       ...h,
       hostname: hostname || h.hostname,
-      // passphrase,
       environment,
       isProd: environment === 'production'
     }))
@@ -36,9 +27,9 @@ export async function run() {
     const gitEventName = github.context.eventName
 
     const environmentsYaml = yaml.load(process.env.ENVIRONMENTS_YAML)
-    const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
-    const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
-    const sshPassphrase = process.env.SSH_PASSPHRASE
+    // const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
+    // const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
+    // const sshPassphrase = process.env.SSH_PASSPHRASE
 
     const productionHostsInput = core.getInput('production-hosts', {
       required: true
@@ -58,21 +49,12 @@ export async function run() {
     const hostname = core.getInput('hostname')
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
-      matrix = mergeHosts(
-        matrix,
-        'staging',
-        environmentsYaml,
-        stagingHosts,
-        staginPk,
-        sshPassphrase
-      )
+      matrix = mergeHosts(matrix, 'staging', environmentsYaml, stagingHosts)
       matrix = mergeHosts(
         matrix,
         'production',
         environmentsYaml,
-        productionHosts,
-        productionPk,
-        sshPassphrase
+        productionHosts
       )
     } else if (
       gitEventName === 'workflow_dispatch' &&
@@ -83,8 +65,6 @@ export async function run() {
         'staging',
         environmentsYaml,
         stagingHosts,
-        staginPk,
-        sshPassphrase,
         hostname
       )
     } else if (
@@ -96,9 +76,7 @@ export async function run() {
         matrix,
         'production',
         environmentsYaml,
-        productionHosts,
-        productionPk,
-        sshPassphrase
+        productionHosts
       )
     }
     core.setOutput('matrix', matrix)
