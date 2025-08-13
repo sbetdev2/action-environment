@@ -35102,7 +35102,7 @@ async function run() {
     });
 
     const stagingHostsInput = coreExports.getInput('staging-hosts', {
-      required: true
+      required: false
     });
 
     const productionHosts = productionHostsInput

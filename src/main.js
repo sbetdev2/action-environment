@@ -36,7 +36,7 @@ export async function run() {
     })
 
     const stagingHostsInput = core.getInput('staging-hosts', {
-      required: true
+      required: false
     })
 
     const productionHosts = productionHostsInput
