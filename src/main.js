@@ -85,7 +85,6 @@ export async function run() {
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     // )
   } catch (error) {
-    // Fail the workflow step if an error occurs
     core.setFailed(error.message)
   }
 }
