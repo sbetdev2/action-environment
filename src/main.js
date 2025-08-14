@@ -102,6 +102,7 @@ export async function run() {
 
     core.setOutput('matrix', matrix)
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
+    core.info(`matrix: ${JSON.stringify(matrix, null, 2)}`)
     // core.info(
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     // )
