@@ -35110,7 +35110,7 @@ async function run() {
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
     let matrix = [];
-    const hostname = coreExports.getInput('hostname') || stagingHosts[0];
+    const hostname = coreExports.getInput('hostname');
     const environment = coreExports.getInput('environment', {
       required: false
     });
@@ -35125,6 +35125,10 @@ async function run() {
       );
     } else if (gitEventName === 'workflow_dispatch') {
       if (environment === 'staging') {
+        if (!hostname && stagingHosts.length !== 0) {
+          hostname = stagingHosts[0];
+        }
+
         if (!stagingHosts.includes(hostname)) {
           throw new Error(
             `The provided hostname "${hostname}" is not in the list of hosts.`
