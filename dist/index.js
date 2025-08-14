@@ -35168,7 +35168,13 @@ async function run() {
 
     coreExports.setOutput('matrix', matrix);
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
-    coreExports.info(`matrix: ${JSON.stringify(matrix, null, 2)}`);
+    coreExports.info(
+      `hostnames for deployment: ${JSON.stringify(
+        matrix.map((h) => h.hostname),
+        null,
+        2
+      )}`
+    );
     // core.info(
     //   `The event payload: ${JSON.stringify(github.context.payload, null, 2)}`
     // )
