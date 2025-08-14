@@ -11,6 +11,10 @@ inputs:
     required: false
   hostname:
     description: Target host to deploy to
+    required: false
+  environment:
+    description: Environment to deploy to
+    required: false
 outputs:
   matrix:
     description: Deployment matrix
