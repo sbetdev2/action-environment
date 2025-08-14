@@ -35110,7 +35110,7 @@ async function run() {
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
 
     let matrix = [];
-    const hostname = coreExports.getInput('hostname');
+    let hostname = coreExports.getInput('hostname');
     const environment = coreExports.getInput('environment', {
       required: false
     });

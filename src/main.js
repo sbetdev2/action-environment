@@ -44,7 +44,7 @@ export async function run() {
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim())
 
     let matrix = []
-    const hostname = core.getInput('hostname')
+    let hostname = core.getInput('hostname')
     const environment = core.getInput('environment', {
       required: false
     })
