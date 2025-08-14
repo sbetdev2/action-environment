@@ -66,12 +66,6 @@ export async function run() {
           hostname = stagingHosts[0]
         }
 
-        if (!stagingHosts.includes(hostname)) {
-          throw new Error(
-            `The provided hostname "${hostname}" is not in the list of hosts.`
-          )
-        }
-
         matrix = mergeHosts(
           matrix,
           'staging',
