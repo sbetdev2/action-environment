@@ -35124,7 +35124,10 @@ async function run() {
         productionHosts
       );
     } else if (gitEventName === 'workflow_dispatch') {
-      if (environment === 'staging') {
+      if (
+        environment === 'staging' ||
+        (!environment && stagingHosts.indexOf(hostname) !== -1)
+      ) {
         if (!hostname && stagingHosts.length !== 0) {
           hostname = stagingHosts[0];
         }
@@ -35137,14 +35140,17 @@ async function run() {
 
         matrix = mergeHosts(
           matrix,
-          environment,
+          'staging',
           environmentsYaml,
           stagingHosts,
           hostname
         );
       }
 
-      if (environment === 'production') {
+      if (
+        environment === 'production' ||
+        (!environment && productionHosts.indexOf(hostname) !== -1)
+      ) {
         if (hostname && !productionHosts.includes(hostname)) {
           throw new Error(
             `The provided hostname "${hostname}" is not in the list of hosts.`
@@ -35159,7 +35165,7 @@ async function run() {
 
         matrix = mergeHosts(
           matrix,
-          environment,
+          'production',
           environmentsYaml,
           productionHosts
         );
