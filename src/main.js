@@ -82,6 +82,16 @@ export async function run() {
       }
 
       if (environment === 'production') {
+        if (
+          hostname &&
+          hostname !== 'all production hosts' &&
+          !productionHosts.includes(hostname)
+        ) {
+          throw new Error(
+            `The provided hostname "${hostname}" is not in the list of hosts.`
+          )
+        }
+
         if (gitRef !== 'refs/heads/master') {
           throw new Error(
             `The environment "production" can only be deployed from the "master" branch.`
