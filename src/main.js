@@ -114,7 +114,7 @@ export async function run() {
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     core.info(
       `hostnames for deployment: ${JSON.stringify(
-        matrix.map((h) => h.hostname),
+        matrix.map((h) => h),
         null,
         2
       )}`
