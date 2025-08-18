@@ -45,9 +45,8 @@ export async function run() {
 
     let matrix = []
     let hostname = core.getInput('hostname')?.trim()
-    const environment = core.getInput('environment', {
-      required: false
-    })
+    const environment = core.getInput('environment')
+    let hosts = null
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       matrix = mergeHosts(matrix, 'staging', environmentsYaml, stagingHosts)
@@ -58,46 +57,52 @@ export async function run() {
         productionHosts
       )
     } else if (gitEventName === 'workflow_dispatch') {
-      if (
-        environment === 'staging' ||
-        (!environment && stagingHosts.indexOf(hostname) !== -1)
-      ) {
-        if (!hostname && stagingHosts.length !== 0) {
-          hostname = stagingHosts[0]
-        }
+      switch (environment) {
+        case 'staging':
+          hosts = stagingHosts
+          break
+        case 'preproduction':
+          hosts = stagingHosts
+          break
+        case 'production':
+          if (
+            hostname &&
+            hostname !== 'all production hosts' &&
+            !productionHosts.includes(hostname)
+          ) {
+            throw new Error(
+              `The provided hostname "${hostname}" is not in the list of hosts.`
+            )
+          }
 
-        matrix = mergeHosts(
-          matrix,
-          'staging',
-          environmentsYaml,
-          stagingHosts,
-          hostname
-        )
-      }
+          if (gitRef !== 'refs/heads/master') {
+            throw new Error(
+              `The environment "production" can only be deployed from the "master" branch.`
+            )
+          }
 
-      if (environment === 'production') {
-        if (
-          hostname &&
-          hostname !== 'all production hosts' &&
-          !productionHosts.includes(hostname)
-        ) {
-          throw new Error(
-            `The provided hostname "${hostname}" is not in the list of hosts.`
+          hosts = productionHosts
+          break
+        default:
+          if (!environment && stagingHosts.indexOf(hostname) !== -1) {
+            if (!hostname && stagingHosts.length !== 0) {
+              hostname = stagingHosts[0]
+            }
+
+            hosts = stagingHosts
+          } else {
+            throw new Error(
+              `The action can only be triggered by a push to the "master" branch or by a workflow dispatch event.`
+            )
+          }
+
+          matrix = mergeHosts(
+            matrix,
+            environment,
+            environmentsYaml,
+            hosts,
+            hostname
           )
-        }
-
-        if (gitRef !== 'refs/heads/master') {
-          throw new Error(
-            `The environment "production" can only be deployed from the "master" branch.`
-          )
-        }
-
-        matrix = mergeHosts(
-          matrix,
-          'production',
-          environmentsYaml,
-          productionHosts
-        )
       }
     } else {
       throw new Error(
