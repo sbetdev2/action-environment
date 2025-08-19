@@ -62,6 +62,7 @@ export async function run() {
           hosts = stagingHosts
           break
         case 'preprod':
+          hostname = null
           hosts = stagingHosts
           break
         case 'production':
@@ -81,6 +82,7 @@ export async function run() {
             )
           }
 
+          hostname = null
           hosts = productionHosts
           break
         default:

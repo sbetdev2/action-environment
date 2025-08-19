@@ -35128,6 +35128,7 @@ async function run() {
           hosts = stagingHosts;
           break
         case 'preprod':
+          hostname = null;
           hosts = stagingHosts;
           break
         case 'production':
@@ -35147,6 +35148,7 @@ async function run() {
             )
           }
 
+          hostname = null;
           hosts = productionHosts;
           break
         default:
