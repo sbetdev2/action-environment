@@ -61,7 +61,7 @@ export async function run() {
         case 'staging':
           hosts = stagingHosts
           break
-        case 'preproduction':
+        case 'preprod':
           hosts = stagingHosts
           break
         case 'production':
@@ -114,7 +114,7 @@ export async function run() {
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     core.info(
       `hostnames for deployment: ${JSON.stringify(
-        matrix.map((h) => h),
+        matrix.map((h) => h.hostname),
         null,
         2
       )}`
