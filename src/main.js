@@ -15,7 +15,8 @@ const mergeHosts = (matrix, environment, envYaml, hostNames, hostname) => {
       ...h,
       hostname: hostname || h.hostname,
       environment,
-      isProd: environment === 'production'
+      isProd: environment === 'production',
+      isPreProd: environment === 'preprod'
     }))
 
   return matrix.concat(newHosts)
