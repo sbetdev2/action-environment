@@ -83,8 +83,13 @@ export async function run() {
             )
           }
 
-          hostname = null
-          hosts = productionHosts
+          if (hostname && productionHosts.includes(hostname)) {
+            hosts = productionHosts.find((h) => h.hostname === hostname)
+          } else {
+            hostname = null
+            hosts = productionHosts
+          }
+
           break
         default:
           if (!environment && stagingHosts.indexOf(hostname) !== -1) {
