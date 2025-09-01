@@ -84,7 +84,7 @@ export async function run() {
           }
 
           if (hostname && productionHosts.includes(hostname)) {
-            hosts = productionHosts.filter((h) => h.hostname === hostname)
+            hosts = productionHosts.filter((h) => h === hostname)
           } else {
             hostname = null
             hosts = productionHosts
