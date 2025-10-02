@@ -35126,7 +35126,19 @@ async function run() {
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
         case 'preprod':
-          hosts = stagingHosts;
+          if (hostname && stagingHosts.includes(hostname)) {
+            hosts = stagingHosts.filter((h) => h === hostname);
+          } else {
+            hostname = null;
+            hosts = stagingHosts;
+          }
+          coreExports.info(
+            `preprod env: ${JSON.stringify(
+              hosts.map((h) => h),
+              null,
+              2
+            )}`
+          );
           break
         case 'production':
           if (
