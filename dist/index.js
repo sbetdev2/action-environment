@@ -35125,11 +35125,7 @@ async function run() {
       );
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
-        case 'staging':
-          hosts = stagingHosts;
-          break
         case 'preprod':
-          hostname = null;
           hosts = stagingHosts;
           break
         case 'production':
