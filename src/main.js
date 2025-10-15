@@ -63,7 +63,7 @@ export async function run() {
           if (hostname && stagingHosts.includes(hostname)) {
             hosts = stagingHosts.filter((h) => h === hostname)
           } else {
-            hostname = null
+            // hostname = null
             hosts = stagingHosts
           }
           core.info(
