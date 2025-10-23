@@ -35094,10 +35094,6 @@ async function run() {
     const gitEventName = githubExports.context.eventName;
 
     const environmentsYaml = jsYaml.load(process.env.ENVIRONMENTS_YAML);
-    // const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
-    // const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
-    // const sshPassphrase = process.env.SSH_PASSPHRASE
-
     const productionHostsInput = coreExports.getInput('production-hosts', {
       required: true
     });
