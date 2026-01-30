@@ -113,7 +113,7 @@ export async function run() {
         matrix,
         environment,
         environmentsYaml,
-        hosts,
+        stagingHosts,
         hostname
       )
     } else {
