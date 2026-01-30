@@ -117,8 +117,12 @@ export async function run() {
         hostname
       )
     } else {
-      throw new Error(
-        `The action can only be triggered by a push to the "master" branch or by a workflow dispatch event.`
+      matrix = mergeHosts(
+        matrix,
+        environment,
+        environmentsYaml,
+        hosts,
+        hostname
       )
     }
 
