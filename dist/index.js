@@ -35179,7 +35179,7 @@ async function run() {
         matrix,
         environment,
         environmentsYaml,
-        stagingHosts,
+        hosts,
         hostname
       );
     } else {
@@ -35187,7 +35187,7 @@ async function run() {
         matrix,
         environment,
         environmentsYaml,
-        hosts,
+        stagingHosts,
         hostname
       );
     }
