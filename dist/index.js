@@ -35106,6 +35106,7 @@ async function run() {
       .map((host) => host.trim());
 
     const integrationHostsInput = coreExports.getInput('integration-hosts');
+    coreExports.info(`integration-hosts input: ${integrationHostsInput}`);
 
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
     const integrationHosts = integrationHostsInput
