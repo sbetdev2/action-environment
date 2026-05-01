@@ -35082,7 +35082,8 @@ const mergeHosts = (matrix, environment, envYaml, hostNames, hostname) => {
       hostname: hostname || h.hostname,
       environment,
       isProd: environment === 'production',
-      isPreProd: environment === 'preprod'
+      isPreProd: environment === 'preprod',
+      isIntegration: environment === 'integration'
     }));
 
   return matrix.concat(newHosts)
@@ -35104,7 +35105,12 @@ async function run() {
       .split(',')
       .map((host) => host.trim());
 
+    const integrationHostsInput = coreExports.getInput('integration-hosts');
+
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim());
+    const integrationHosts = integrationHostsInput
+      ? integrationHostsInput.split(',').map((host) => host.trim())
+      : [];
 
     let matrix = [];
     let hostname = coreExports.getInput('hostname')?.trim();
@@ -35121,6 +35127,20 @@ async function run() {
       );
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
+        case 'integration':
+          if (hostname && integrationHosts.includes(hostname)) {
+            hosts = integrationHosts.filter((h) => h === hostname);
+          } else {
+            hosts = integrationHosts;
+          }
+          coreExports.info(
+            `integration env: ${JSON.stringify(
+              hosts.map((h) => h),
+              null,
+              2
+            )}`
+          );
+          break
         case 'preprod':
           if (hostname && stagingHosts.includes(hostname)) {
             hosts = stagingHosts.filter((h) => h === hostname);

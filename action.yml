@@ -9,6 +9,9 @@ inputs:
   staging-hosts:
     description: Staging host names
     required: false
+  integration-hosts:
+    description: Integration host names
+    required: false
   hostname:
     description: Target host to deploy to
     required: false
