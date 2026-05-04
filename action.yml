@@ -21,6 +21,10 @@ inputs:
 outputs:
   matrix:
     description: Deployment matrix
+  integrationMatrix:
+    description: Integration and staging hosts only
+  productionMatrix:
+    description: Production hosts only
   branch:
     description: Branch name
 runs:
