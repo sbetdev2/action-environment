@@ -35126,6 +35126,14 @@ async function run() {
         environmentsYaml,
         productionHosts
       );
+      if (integrationHosts.length > 0) {
+        matrix = mergeHosts(
+          matrix,
+          'integration',
+          environmentsYaml,
+          integrationHosts
+        );
+      }
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
         case 'integration':
@@ -35179,6 +35187,15 @@ async function run() {
           } else {
             hostname = null;
             hosts = productionHosts;
+          }
+
+          if (integrationHosts.length > 0) {
+            matrix = mergeHosts(
+              matrix,
+              'integration',
+              environmentsYaml,
+              integrationHosts
+            );
           }
 
           break
