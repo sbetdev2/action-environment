@@ -35120,12 +35120,6 @@ async function run() {
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
       matrix = mergeHosts(matrix, 'preprod', environmentsYaml, stagingHosts);
-      matrix = mergeHosts(
-        matrix,
-        'production',
-        environmentsYaml,
-        productionHosts
-      );
       if (integrationHosts.length > 0) {
         matrix = mergeHosts(
           matrix,
@@ -35134,6 +35128,12 @@ async function run() {
           integrationHosts
         );
       }
+      matrix = mergeHosts(
+        matrix,
+        'production',
+        environmentsYaml,
+        productionHosts
+      );
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
         case 'integration':
