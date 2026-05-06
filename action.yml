@@ -22,7 +22,9 @@ outputs:
   matrix:
     description: Deployment matrix
   integrationMatrix:
-    description: Integration and staging hosts only
+    description: Integration hosts only
+  preprodMatrix:
+    description: Preprod/staging hosts only
   productionMatrix:
     description: Production hosts only
   branch:

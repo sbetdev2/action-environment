@@ -167,14 +167,6 @@ export async function run() {
     }
 
     core.setOutput('matrix', matrix)
-    core.setOutput(
-      'integrationMatrix',
-      matrix.filter((h) => !h.isProd)
-    )
-    core.setOutput(
-      'productionMatrix',
-      matrix.filter((h) => h.isProd)
-    )
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     core.info(
       `hostnames for deployment: ${JSON.stringify(

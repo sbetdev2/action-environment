@@ -35233,14 +35233,6 @@ async function run() {
     }
 
     coreExports.setOutput('matrix', matrix);
-    coreExports.setOutput(
-      'integrationMatrix',
-      matrix.filter((h) => !h.isProd)
-    );
-    coreExports.setOutput(
-      'productionMatrix',
-      matrix.filter((h) => h.isProd)
-    );
     coreExports.setOutput('branch', gitRef.replace('refs/heads/', ''));
     coreExports.info(
       `hostnames for deployment: ${JSON.stringify(
