@@ -53,7 +53,7 @@ export async function run() {
     let hosts = null
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
-      matrix = mergeHosts(matrix, 'staging', environmentsYaml, stagingHosts)
+      matrix = mergeHosts(matrix, 'preprod', environmentsYaml, stagingHosts)
       matrix = mergeHosts(
         matrix,
         'production',
@@ -123,6 +123,8 @@ export async function run() {
             hosts = productionHosts
           }
 
+          matrix = mergeHosts(matrix, 'preprod', environmentsYaml, stagingHosts)
+
           if (integrationHosts.length > 0) {
             matrix = mergeHosts(
               matrix,
@@ -165,8 +167,14 @@ export async function run() {
     }
 
     core.setOutput('matrix', matrix)
-    core.setOutput('integrationMatrix', matrix.filter((h) => !h.isProd))
-    core.setOutput('productionMatrix', matrix.filter((h) => h.isProd))
+    core.setOutput(
+      'integrationMatrix',
+      matrix.filter((h) => !h.isProd)
+    )
+    core.setOutput(
+      'productionMatrix',
+      matrix.filter((h) => h.isProd)
+    )
     core.setOutput('branch', gitRef.replace('refs/heads/', ''))
     core.info(
       `hostnames for deployment: ${JSON.stringify(
