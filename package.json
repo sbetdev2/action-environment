@@ -29,7 +29,7 @@
     "yarn": "please-use-pnpm"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    "preinstall": "npx only-allow@1.2.2 pnpm",
     "bundle": "pnpm run format:write && pnpm run package",
     "ci-test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 pnpm exec jest",
     "coverage": "pnpm exec make-coverage-badge --output-path ./badges/coverage.svg",
