@@ -31,23 +31,30 @@ jobs:
         id: checkout
         uses: actions/checkout@v5
 
+      # Setup pnpm before Node.js so setup-node can use the pnpm cache.
+      - name: Setup pnpm
+        id: setup-pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
       # Setup Node.js using the version specified in `.node-version`.
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v5
         with:
           node-version-file: .node-version
-          cache: npm
+          cache: pnpm
 
-      # Install dependencies using `npm ci`.
+      # Install dependencies using `pnpm install --frozen-lockfile`.
       - name: Install Dependencies
         id: install
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # Build the `dist/` directory.
       - name: Build dist/ Directory
         id: build
-        run: npm run bundle
+        run: pnpm run bundle
 
       # This will fail the workflow if the `dist/` directory is different than
       # expected.

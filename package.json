@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@9.15.0",
   "homepage": "https://github.com/actions/action-environment#readme",
   "repository": {
     "type": "git",
@@ -22,19 +23,23 @@
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=9",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm"
   },
   "scripts": {
-    "bundle": "npm run format:write && npm run package",
-    "ci-test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest",
-    "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
-    "format:write": "npx prettier --write .",
-    "format:check": "npx prettier --check .",
-    "lint": "npx eslint .",
-    "package": "npx rollup --config rollup.config.js",
-    "package:watch": "npm run package -- --watch",
-    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+    "preinstall": "npx only-allow@1.2.2 pnpm",
+    "bundle": "pnpm run format:write && pnpm run package",
+    "ci-test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 pnpm exec jest",
+    "coverage": "pnpm exec make-coverage-badge --output-path ./badges/coverage.svg",
+    "format:write": "pnpm exec prettier --write .",
+    "format:check": "pnpm exec prettier --check .",
+    "lint": "pnpm exec eslint .",
+    "package": "pnpm exec rollup --config rollup.config.js",
+    "package:watch": "pnpm run package -- --watch",
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 pnpm exec jest",
+    "all": "pnpm run format:write && pnpm run lint && pnpm run test && pnpm run coverage && pnpm run package"
   },
   "license": "MIT",
   "dependencies": {
