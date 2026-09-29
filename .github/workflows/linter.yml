@@ -36,12 +36,12 @@ jobs:
         id: setup-pnpm
         uses: pnpm/action-setup@v4
 
-      # Setup Node.js using the version specified in `.node-version`.
+      # Setup Node.js using the version specified in `.nvmrc`.
       - name: Setup Node.js
         id: setup-node
         uses: actions/setup-node@v5
         with:
-          node-version-file: .node-version
+          node-version-file: .nvmrc
           cache: pnpm
 
       # Install dependencies using `pnpm install --frozen-lockfile`.
