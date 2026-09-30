@@ -34,7 +34,7 @@ jobs:
       # Setup pnpm before Node.js so setup-node can use the pnpm cache.
       - name: Setup pnpm
         id: setup-pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       # Setup Node.js using the version specified in `.nvmrc`.
       - name: Setup Node.js
