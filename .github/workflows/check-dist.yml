@@ -43,6 +43,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       # Install dependencies using `pnpm install --frozen-lockfile`.
       - name: Install Dependencies
