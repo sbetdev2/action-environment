@@ -4,12 +4,18 @@ on:
   pull_request:
     types:
       - opened
-      - reopened
       - ready_for_review
-      - converted_to_draft
+    # Don't notify for PRs that only change this workflow file. This also keeps
+    # the rollout PRs (which touch only this file) from self-triggering a flood.
+    paths-ignore:
+      - ".github/workflows/notify-pr-opened.yml"
 
 jobs:
   notify:
+    # Only notify PRs that are ready for review. An `opened` event also fires for
+    # draft PRs (draft == true) — skip those. `ready_for_review` fires when a
+    # draft is promoted to ready and always has draft == false.
+    if: ${{ github.event.pull_request.draft == false }}
     runs-on: ubuntu-latest
     steps:
       - name: Post Telegram notification
@@ -26,15 +32,8 @@ jobs:
           HEAD=$(esc "${PR_HEAD}")
           BASE=$(esc "${PR_BASE}")
 
-          # Header reflects whether the PR is a draft or ready for review.
-          if [ "${IS_DRAFT}" = "true" ]; then
-            HEADER="📝 <b>New draft pull request</b>"
-          else
-            HEADER="🔔 <b>New pull request</b>"
-          fi
-
           message=$(cat <<EOF
-          ${HEADER} #${PR_NUMBER} in <b>${REPO}</b>
+          🔔 <b>New pull request</b> #${PR_NUMBER} in <b>${REPO}</b>
           <b>${TITLE}</b>
           👤 by <i>${AUTHOR}</i>
           🔀 <code>${HEAD}</code> → <code>${BASE}</code>
@@ -60,4 +59,3 @@ jobs:
           CHANGED: ${{ github.event.pull_request.changed_files }}
           ADDITIONS: ${{ github.event.pull_request.additions }}
           DELETIONS: ${{ github.event.pull_request.deletions }}
-          IS_DRAFT: ${{ github.event.pull_request.draft }}
