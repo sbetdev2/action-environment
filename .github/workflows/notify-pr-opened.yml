@@ -33,12 +33,9 @@ jobs:
           BASE=$(esc "${PR_BASE}")
 
           message=$(cat <<EOF
-          🔔 <b>New pull request</b> #${PR_NUMBER} in <b>${REPO}</b>
-          <b>${TITLE}</b>
-          👤 by <i>${AUTHOR}</i>
-          🔀 <code>${HEAD}</code> → <code>${BASE}</code>
-          📝 ${CHANGED} changed file(s), +${ADDITIONS} −${DELETIONS}
-          <a href="${PR_URL}">View pull request</a>
+          🔔 <b>${REPO}</b>
+          <i>${AUTHOR}</i> submitted PR <a href="${PR_URL}">#${PR_NUMBER}</a> - ${TITLE}
+          <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
 
