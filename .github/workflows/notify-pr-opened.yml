@@ -33,8 +33,8 @@ jobs:
           BASE=$(esc "${PR_BASE}")
 
           message=$(cat <<EOF
-          🔔 <b>${REPO}</b>
-          <i>${AUTHOR}</i> submitted PR <a href="${PR_URL}">#${PR_NUMBER}</a> - ${TITLE}
+          🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>
+          PR <a href="${PR_URL}">#${PR_NUMBER}</a> - ${TITLE}
           <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
