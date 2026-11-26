@@ -45,21 +45,24 @@ jobs:
             map("#" + (. | gsub("[^a-zA-Z0-9]+"; "_") | sub("^_";"") | sub("_$";"")))
             | join(" ")')
 
-          # Combine story + label tags; squeeze/trim so an empty half leaves no gap.
-          TAGS=$(printf '%s %s' "${STORY_TAGS}" "${LABEL_TAGS}" | tr -s ' ' | sed -e 's/^ //' -e 's/ $//')
+          # Story tags sit on the header line, right after the author.
+          HEADER="🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>"
+          if [ -n "${STORY_TAGS}" ]; then
+            HEADER="${HEADER} ${STORY_TAGS}"
+          fi
 
           message=$(cat <<EOF
-          🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>
+          ${HEADER}
           PR ${PR_URL}
           ${TITLE}
           <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
 
-          # Append a hashtags line only when there are story or label tags.
-          if [ -n "${TAGS}" ]; then
+          # Append label hashtags on their own line only when the PR has labels.
+          if [ -n "${LABEL_TAGS}" ]; then
             message="${message}
-          ${TAGS}"
+          ${LABEL_TAGS}"
           fi
 
           curl -s -X POST "https://api.telegram.org/bot${{ vars.NOTIFICATIONS_TOKEN }}/sendMessage" \
