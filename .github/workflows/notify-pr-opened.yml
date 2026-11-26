@@ -29,8 +29,6 @@ jobs:
 
           AUTHOR=$(esc "${PR_AUTHOR}")
           TITLE=$(esc "${PR_TITLE}")
-          HEAD=$(esc "${PR_HEAD}")
-          BASE=$(esc "${PR_BASE}")
 
           # Story tags from the branch name: Jira-style keys like SO-3757 become
           # #SO_3757. Telegram ends a hashtag at "-", so hyphen -> underscore
@@ -57,7 +55,7 @@ jobs:
           ${HEADER}
           PR ${PR_URL}
           ${TITLE}
-          <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
+          ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
 
@@ -79,7 +77,6 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           PR_HEAD: ${{ github.event.pull_request.head.ref }}
-          PR_BASE: ${{ github.event.pull_request.base.ref }}
           PR_URL: ${{ github.event.pull_request.html_url }}
           CHANGED: ${{ github.event.pull_request.changed_files }}
           ADDITIONS: ${{ github.event.pull_request.additions }}
