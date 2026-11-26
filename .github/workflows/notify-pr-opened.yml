@@ -32,12 +32,25 @@ jobs:
           HEAD=$(esc "${PR_HEAD}")
           BASE=$(esc "${PR_BASE}")
 
+          # Turn each PR label into a Telegram hashtag. Telegram ends a hashtag at
+          # the first non-word char, so collapse any run of non-alphanumerics into
+          # "_" (e.g. "good first issue" -> #good_first_issue, "P0-bug" -> #P0_bug).
+          TAGS=$(printf '%s' "${LABELS_JSON}" | jq -r '
+            map("#" + (. | gsub("[^a-zA-Z0-9]+"; "_") | sub("^_";"") | sub("_$";"")))
+            | join(" ")')
+
           message=$(cat <<EOF
           🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>
           PR ${PR_URL} - ${TITLE}
           <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
+
+          # Append a hashtags line only when the PR has labels.
+          if [ -n "${TAGS}" ]; then
+            message="${message}
+          ${TAGS}"
+          fi
 
           curl -s -X POST "https://api.telegram.org/bot${{ vars.NOTIFICATIONS_TOKEN }}/sendMessage" \
             --data-urlencode "chat_id=${{ vars.NOTIFICATIONS_TO }}" \
@@ -56,3 +69,4 @@ jobs:
           CHANGED: ${{ github.event.pull_request.changed_files }}
           ADDITIONS: ${{ github.event.pull_request.additions }}
           DELETIONS: ${{ github.event.pull_request.deletions }}
+          LABELS_JSON: ${{ toJSON(github.event.pull_request.labels.*.name) }}
