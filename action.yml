@@ -9,6 +9,9 @@ inputs:
   staging-hosts:
     description: Staging host names
     required: false
+  integration-hosts:
+    description: Integration host names
+    required: false
   hostname:
     description: Target host to deploy to
     required: false
@@ -18,8 +21,14 @@ inputs:
 outputs:
   matrix:
     description: Deployment matrix
+  integrationMatrix:
+    description: Integration hosts only
+  preprodMatrix:
+    description: Preprod/staging hosts only
+  productionMatrix:
+    description: Production hosts only
   branch:
     description: Branch name
 runs:
-  using: node20
+  using: node24
   main: dist/index.js

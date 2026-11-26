@@ -27,18 +27,23 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        id: setup-pnpm
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         id: setup-node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version-file: .node-version
-          cache: npm
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install Dependencies
         id: npm-ci
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Setup Ruby
         id: setup-ruby
@@ -48,7 +53,7 @@ jobs:
 
       - uses: licensee/setup-licensed@v1.3.2
         with:
-          version: 4.x
+          version: 5.x
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # If this is a workflow_dispatch event, update the cached licenses.

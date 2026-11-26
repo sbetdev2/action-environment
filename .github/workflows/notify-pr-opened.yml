@@ -1,0 +1,84 @@
+name: Notify PR Opened
+
+on:
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+    # Don't notify for PRs that only change this workflow file. This also keeps
+    # the rollout PRs (which touch only this file) from self-triggering a flood.
+    paths-ignore:
+      - ".github/workflows/notify-pr-opened.yml"
+
+jobs:
+  notify:
+    # Only notify PRs that are ready for review. An `opened` event also fires for
+    # draft PRs (draft == true) — skip those. `ready_for_review` fires when a
+    # draft is promoted to ready and always has draft == false.
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post Telegram notification
+        continue-on-error: true
+        run: |
+          # PR fields (title, branch, author) are user-controlled, so HTML-escape
+          # &, < and > before embedding them in an HTML-parse-mode message.
+          # Newlines are literal here; --data-urlencode encodes the whole body
+          # (including the escaped & entities), so nothing breaks the form.
+          esc() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'; }
+
+          AUTHOR=$(esc "${PR_AUTHOR}")
+          TITLE=$(esc "${PR_TITLE}")
+
+          # Story tags from the branch name: Jira-style keys like SO-3757 become
+          # #SO_3757. Telegram ends a hashtag at "-", so hyphen -> underscore
+          # (keeps same-story PRs groupable under one clickable tag). Handles the
+          # shared-key shorthand too: SO-3671-3672 -> #SO_3671 #SO_3672, and
+          # multiple distinct keys (SO-123-ABC-456). De-duplicated.
+          STORY_TAGS=$(printf '%s' "${PR_HEAD}" | grep -oE '[A-Z]{2,}-[0-9]+(-[0-9]+)*' \
+            | awk '{n=split($0,a,"-"); for(i=2;i<=n;i++) print "#"a[1]"_"a[i]}' \
+            | sort -u | paste -sd' ' -)
+
+          # Label tags: each PR label as a hashtag, punctuation collapsed to "_"
+          # (e.g. "good first issue" -> #good_first_issue, "P0-bug" -> #P0_bug).
+          LABEL_TAGS=$(printf '%s' "${LABELS_JSON}" | jq -r '
+            map("#" + (. | gsub("[^a-zA-Z0-9]+"; "_") | sub("^_";"") | sub("_$";"")))
+            | join(" ")')
+
+          # Story tags sit on the header line, right after the author.
+          HEADER="🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>"
+          if [ -n "${STORY_TAGS}" ]; then
+            HEADER="${HEADER} ${STORY_TAGS}"
+          fi
+
+          message=$(cat <<EOF
+          ${HEADER}
+          PR ${PR_URL}
+          ${TITLE}
+          ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
+          EOF
+          )
+
+          # Append label hashtags on their own line only when the PR has labels.
+          if [ -n "${LABEL_TAGS}" ]; then
+            message="${message}
+          ${LABEL_TAGS}"
+          fi
+
+          curl -s -X POST "https://api.telegram.org/bot${{ vars.NOTIFICATIONS_TOKEN }}/sendMessage" \
+            --data-urlencode "chat_id=${{ vars.NOTIFICATIONS_TO }}" \
+            --data-urlencode "message_thread_id=2" \
+            --data-urlencode "parse_mode=HTML" \
+            --data-urlencode "disable_web_page_preview=true" \
+            --data-urlencode "text=${message}"
+        env:
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_HEAD: ${{ github.event.pull_request.head.ref }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          CHANGED: ${{ github.event.pull_request.changed_files }}
+          ADDITIONS: ${{ github.event.pull_request.additions }}
+          DELETIONS: ${{ github.event.pull_request.deletions }}
+          LABELS_JSON: ${{ toJSON(github.event.pull_request.labels.*.name) }}

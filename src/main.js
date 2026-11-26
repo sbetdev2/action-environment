@@ -16,7 +16,8 @@ const mergeHosts = (matrix, environment, envYaml, hostNames, hostname) => {
       hostname: hostname || h.hostname,
       environment,
       isProd: environment === 'production',
-      isPreProd: environment === 'preprod'
+      isPreProd: environment === 'preprod',
+      isIntegration: environment === 'integration'
     }))
 
   return matrix.concat(newHosts)
@@ -28,10 +29,6 @@ export async function run() {
     const gitEventName = github.context.eventName
 
     const environmentsYaml = yaml.load(process.env.ENVIRONMENTS_YAML)
-    // const productionPk = process.env.SSH_PRODUCTION_PRIVATE_KEY
-    // const staginPk = process.env.SSH_STAGING_PRIVATE_KEY
-    // const sshPassphrase = process.env.SSH_PASSPHRASE
-
     const productionHostsInput = core.getInput('production-hosts', {
       required: true
     })
@@ -42,7 +39,13 @@ export async function run() {
       .split(',')
       .map((host) => host.trim())
 
+    const integrationHostsInput = core.getInput('integration-hosts')
+    core.info(`integration-hosts input: ${integrationHostsInput}`)
+
     const stagingHosts = stagingHostsInput.split(',').map((host) => host.trim())
+    const integrationHosts = integrationHostsInput
+      ? integrationHostsInput.split(',').map((host) => host.trim())
+      : []
 
     let matrix = []
     let hostname = core.getInput('hostname')?.trim()
@@ -50,7 +53,15 @@ export async function run() {
     let hosts = null
 
     if (gitRef === 'refs/heads/master' && gitEventName === 'push') {
-      matrix = mergeHosts(matrix, 'staging', environmentsYaml, stagingHosts)
+      matrix = mergeHosts(matrix, 'preprod', environmentsYaml, stagingHosts)
+      if (integrationHosts.length > 0) {
+        matrix = mergeHosts(
+          matrix,
+          'integration',
+          environmentsYaml,
+          integrationHosts
+        )
+      }
       matrix = mergeHosts(
         matrix,
         'production',
@@ -59,11 +70,25 @@ export async function run() {
       )
     } else if (gitEventName === 'workflow_dispatch') {
       switch (environment) {
+        case 'integration':
+          if (hostname && integrationHosts.includes(hostname)) {
+            hosts = integrationHosts.filter((h) => h === hostname)
+          } else {
+            hosts = integrationHosts
+          }
+          core.info(
+            `integration env: ${JSON.stringify(
+              hosts.map((h) => h),
+              null,
+              2
+            )}`
+          )
+          break
         case 'preprod':
           if (hostname && stagingHosts.includes(hostname)) {
             hosts = stagingHosts.filter((h) => h === hostname)
           } else {
-            hostname = null
+            // hostname = null
             hosts = stagingHosts
           }
           core.info(
@@ -98,6 +123,17 @@ export async function run() {
             hosts = productionHosts
           }
 
+          matrix = mergeHosts(matrix, 'preprod', environmentsYaml, stagingHosts)
+
+          if (integrationHosts.length > 0) {
+            matrix = mergeHosts(
+              matrix,
+              'integration',
+              environmentsYaml,
+              integrationHosts
+            )
+          }
+
           break
         default:
           if (!environment && stagingHosts.indexOf(hostname) !== -1) {
@@ -121,8 +157,12 @@ export async function run() {
         hostname
       )
     } else {
-      throw new Error(
-        `The action can only be triggered by a push to the "master" branch or by a workflow dispatch event.`
+      matrix = mergeHosts(
+        matrix,
+        environment,
+        environmentsYaml,
+        stagingHosts,
+        hostname
       )
     }
 
