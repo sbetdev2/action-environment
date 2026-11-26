@@ -34,7 +34,7 @@ jobs:
 
           message=$(cat <<EOF
           🔔 <b>${REPO}</b> by <i>${AUTHOR}</i>
-          PR <a href="${PR_URL}">#${PR_NUMBER}</a> - ${TITLE}
+          PR ${PR_URL} - ${TITLE}
           <code>${HEAD}</code> → <code>${BASE}</code> - ${CHANGED} file(s) changed, +${ADDITIONS} −${DELETIONS}
           EOF
           )
